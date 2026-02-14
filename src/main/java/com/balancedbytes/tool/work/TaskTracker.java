@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class TimeTracker extends JFrame {
+public class TaskTracker extends JFrame {
 
     private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss");
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("EEE dd.MM.yyyy");
@@ -16,7 +16,7 @@ public class TimeTracker extends JFrame {
     private DefaultListModel<String> listModel;
     private String currentProject;
 
-    public TimeTracker() {
+    public TaskTracker() {
 
         super("TimeTracker");
 
@@ -116,8 +116,8 @@ public class TimeTracker extends JFrame {
     }
 
     public static void main(String[] args) {
-        TimeTracker timeTracker = new TimeTracker();
-        timeTracker.setVisible(true);
+        TaskTracker taskTracker = new TaskTracker();
+        taskTracker.setVisible(true);
     }
 
 }

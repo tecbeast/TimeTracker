@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.balancedbytes.tool.work</groupId>
-    <artifactId>TimeTracker</artifactId>
+    <artifactId>TaskTracker</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
@@ -45,7 +45,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>libs/</classpathPrefix>
-                            <mainClass>com.balancedbytes.tool.work.TimeTracker</mainClass>
+                            <mainClass>com.balancedbytes.tool.work.TaskTracker</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
