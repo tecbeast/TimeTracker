@@ -2,12 +2,14 @@ package com.balancedbytes.tool.work;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class JournalEntry {
 
     private static final String COMMA = ",";
     private static final String BLANK = " ";
+    private static final String MINUS = "-";
     private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss");
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final SimpleDateFormat DATETIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -16,17 +18,13 @@ public class JournalEntry {
     private Date stopDate;
     private String task;
 
-    private JournalEntry() {
-        super();
-    }
-
     public JournalEntry(Date startDate, String task) {
         setStartDate(startDate);
         setTask(task);
     }
 
     public Date getStartDate() {
-        return startDate;
+        return this.startDate;
     }
 
     private void setStartDate(Date startDate) {
@@ -34,7 +32,7 @@ public class JournalEntry {
     }
 
     public Date getStopDate() {
-        return stopDate;
+        return this.stopDate;
     }
 
     public void setStopDate(Date stopDate) {
@@ -42,35 +40,55 @@ public class JournalEntry {
     }
 
     public String getTask() {
-        return task;
+        return this.task;
     }
 
     private void setTask(String task) {
         this.task = task;
     }
 
-    public int getMinutes() {
-        if ((startDate == null) || (stopDate == null)) {
+    public int getMinutesTotal() {
+        if ((this.startDate == null) || (this.stopDate == null)) {
             return 0;
         }
-        long timeInMs = stopDate.getTime() - startDate.getTime();
+        long timeInMs = this.stopDate.getTime() - this.startDate.getTime();
         if (timeInMs <= 0) {
             return 0;
         }
         return (int) Math.floorDiv(timeInMs, 60000);
     }
 
+    public boolean hasStartedToday() {
+        String today = DATE_FORMAT.format(Calendar.getInstance().getTime());
+        String started = DATE_FORMAT.format(getStartDate());
+        return started.equals(today);
+    }
+
+    public String toListEntry() {
+        String listEntry = "<html>";
+        if (this.stopDate == null) {
+            listEntry += TIME_FORMAT.format(this.startDate) + " <b>" + this.task + "</b>";
+        } else {
+            listEntry += TIME_FORMAT.format(this.startDate) + MINUS + TIME_FORMAT.format(this.stopDate)
+                + " <b>" + this.task + "</b>" + " (" + Util.getVariableTimeFormat(getMinutesTotal()) + ")";
+        }
+        listEntry += "</html>";
+        return listEntry;
+    }
+
     public String toCsv() {
         String result = "";
-        result += DATE_FORMAT.format(startDate);
+        result += DATE_FORMAT.format(getStartDate());
         result += COMMA;
-        result += TIME_FORMAT.format(startDate);
+        result += TIME_FORMAT.format(getStartDate());
         result += COMMA;
         if (stopDate != null) {
-            result += TIME_FORMAT.format(stopDate);
+            result += TIME_FORMAT.format(getStopDate());
         }
         result += COMMA;
-        result += task;
+        result += getTask();
+        result += COMMA;
+        result += getMinutesTotal();
         return result;
     }
 
@@ -79,15 +97,16 @@ public class JournalEntry {
         if (columns.length < 4) {
             return null;
         }
-        JournalEntry entry = new JournalEntry();
         try {
-            entry.setStartDate(DATETIME_FORMAT.parse(columns[0] + BLANK + columns[1]));
-            entry.setStopDate(DATETIME_FORMAT.parse(columns[0] + BLANK + columns[2]));
+            Date startDate = DATETIME_FORMAT.parse(columns[0] + BLANK + columns[1]);
+            String task = columns[3];
+            JournalEntry entry = new JournalEntry(startDate, task);
+            Date stopDate = DATETIME_FORMAT.parse(columns[0] + BLANK + columns[2]);
+            entry.setStopDate(stopDate);
+            return entry;
         } catch (ParseException pe) {
             return null;
         }
-        entry.setTask(columns[3]);
-        return entry;
     }
 
 }

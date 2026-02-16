@@ -47,13 +47,24 @@
                             <classpathPrefix>lib/</classpathPrefix>
                             <mainClass>com.balancedbytes.tool.work.TaskTracker</mainClass>
                         </manifest>
+s                        <!--
                         <manifestEntries>
                             <Class-Path>.</Class-Path>
                         </manifestEntries>
+                        -->
                     </archive>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.21.0</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 </project>
