@@ -25,8 +25,7 @@ public class TaskTrackerUi extends JFrame {
     private JournalEntry currentEntry;
     private final TaskTracker taskTracker;
     private boolean showSummary;
-    private JRadioButtonMenuItem menuItemJournal;
-    private JRadioButtonMenuItem menuItemSummary;
+    private JCheckBoxMenuItem menuItemSummary;
 
     public TaskTrackerUi(TaskTracker taskTracker) {
 
@@ -185,7 +184,6 @@ public class TaskTrackerUi extends JFrame {
             Date startDate = Calendar.getInstance().getTime();
             this.currentEntry = new JournalEntry(startDate, task);
             this.listModel.add(0, this.currentEntry.toListEntry());
-            this.menuItemJournal.setEnabled(false);
             this.menuItemSummary.setEnabled(false);
         }
     }
@@ -198,7 +196,6 @@ public class TaskTrackerUi extends JFrame {
             this.taskTracker.getJournal().add(this.currentEntry);
             updateListModel();
             this.currentEntry = null;
-            this.menuItemJournal.setEnabled(true);
             this.menuItemSummary.setEnabled(true);
             save(exit);
         } else {
@@ -212,21 +209,11 @@ public class TaskTrackerUi extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         JMenu menuSettings = new JMenu("Settings");
         menuBar.add(menuSettings);
-        ButtonGroup group = new ButtonGroup();
-        this.menuItemJournal = new JRadioButtonMenuItem("Show Journal");
-        this.menuItemJournal.setSelected(true);
-        this.menuItemJournal.addActionListener(e -> {
-            this.showSummary = false;
-            updateListModel();
-        });
-        group.add(this.menuItemJournal);
-        menuSettings.add(this.menuItemJournal);
-        this.menuItemSummary = new JRadioButtonMenuItem("Show Summary");
+        this.menuItemSummary = new JCheckBoxMenuItem("Show Summary");
         this.menuItemSummary.addActionListener(e -> {
-            this.showSummary = true;
+            this.showSummary = this.menuItemSummary.getState();
             updateListModel();
         });
-        group.add(this.menuItemSummary);
         menuSettings.add(this.menuItemSummary);
         return menuBar;
     }
